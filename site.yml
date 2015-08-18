@@ -1,10 +1,10 @@
 ---
-- hosts: tin
+- hosts: 127.0.0.1
   remote_user: mwdeploy
   roles:
     - sync-file-local
 
-- hosts: tin
+- hosts: 127.0.0.1
   roles:
     - nearest-host-module
     - set-hosts

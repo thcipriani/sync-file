@@ -29,9 +29,13 @@ get_source() {
 }
 
 run_playbook() {
+    # have to use the -i flag for inventory because the flag
+    # has arbitrarily changed from --inventory to --inventory-file
+    SSH_AUTH_SOCK=/run/keyholder/proxy.sock \
     ANSIBLE_NOCOWS=1 \
         ansible-playbook \
-        --inventory "${source_dir}/restbase" \
+        --user mwdeploy \
+        -i "${source_dir}/restbase" \
         --extra-vars "file_name=$1" \
         "${source_dir}/site.yml"
 }

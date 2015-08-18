@@ -2,7 +2,7 @@
 - name: Set closest host in facts
   nearest-host:
     default: staging.test.tin
-    hosts: "{{hostvars['staging-test-tin.eqiad.wmflabs']['dsh_hosts']}}"
+    hosts: "{{hostvars['127.0.0.1']['dsh_hosts']}}"
 
 - name: Closest host
   debug: msg="The closest host to this host is {{closest_host}}"
