@@ -25,7 +25,7 @@ get_source() {
         [[ $source != /* ]] && source ="$source_dir/$source" # if $source was a relative symlink, we need to resolve it relative to the path where the symlink file was located
     done
 
-    source_dir="$( cd -P "$( dirname "$source" )" && pwd )"
+    source_dir="$( cd -P "$( dirname "$source" )/.." && pwd )"
 }
 
 run_playbook() {
