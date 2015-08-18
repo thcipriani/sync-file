@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+source=${BASH_SOURCE[0]}
+dir=$(pwd)
+
+die() {
+    printf "$(tput setaf 1)[ERROR]$(tput sgr0) %s\n" "$@"
+    exit 1
+}
+
+if [[ "$dir" != "/srv/mediawiki-staging" ]]; then
+    printf "$(tput setaf 1)[ERROR]$(tput sgr0) must be under /srv/mediawiki-staging directory\n"
+    exit 1
+fi
+
+check_filename() {
+    local file="$1"
+    [ ! -r "$file" ] && die "Cannot read file ${file}"
+}
+
+get_source() {
+    while [ -h "$source" ]; do # resolve $source until the file is no longer a symlink
+        source_dir="$( cd -P "$( dirname "$source" )" && pwd )"
+        source="$(readlink "$source")"
+        [[ $source != /* ]] && source ="$source_dir/$source" # if $source was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+    done
+
+    source_dir="$( cd -P "$( dirname "$source" )" && pwd )"
+}
+
+run_playbook() {
+    ANSIBLE_NOCOWS=1 \
+        ansible-playbook \
+        --inventory "${source_dir}/restbase" \
+        --extra-vars "file_name=$1" \
+        "${source_dir}/site.yml"
+}
+
+main() {
+    local file="$1"
+    get_source
+    check_filename "$file"
+    run_playbook "$file"
+}
+
+main "$@"

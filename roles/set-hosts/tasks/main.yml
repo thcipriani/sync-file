@@ -1,0 +1,6 @@
+---
+- name: Set hosts in facts
+  set-hosts: "group=restbase-installation"
+
+- name: Hosts
+  debug: msg="Hosts from the dsh-file {{dsh_hosts}}"

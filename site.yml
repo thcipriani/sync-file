@@ -1,0 +1,14 @@
+---
+- hosts: tin
+  remote_user: mwdeploy
+  roles:
+    - sync-file-local
+
+- hosts: tin
+  roles:
+    - nearest-host-module
+    - set-hosts
+
+- hosts: restbase
+  roles:
+    - set-closest

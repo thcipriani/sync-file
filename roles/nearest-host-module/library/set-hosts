@@ -1,0 +1,36 @@
+#!/usr/bin/env python
+
+import os
+import re
+
+
+def read_dsh_hosts_file(path):
+    """Reads hosts from a file into a list.
+
+    Blank lines and comments are ignored.
+    """
+    try:
+        with open(os.path.join('/etc/dsh/group', path)) as hosts_file:
+            return re.findall(r'^[\w\.\-]+', hosts_file.read(), re.MULTILINE)
+    except IOError as e:
+        raise IOError(e.errno, e.strerror, path)
+
+
+def main():
+
+    module = AnsibleModule(
+        argument_spec=dict(
+            group=dict(required=True, type='str'),
+        )
+    )
+
+    hosts = read_dsh_hosts_file(module.params['group'])
+    result = {}
+    result['ansible_facts'] = {'dsh_hosts': hosts}
+    module.exit_json(**result)
+
+
+from ansible.module_utils.basic import *
+from ansible.module_utils.facts import *
+
+main()

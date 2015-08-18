@@ -1,0 +1,8 @@
+---
+- name: sync file local
+  # relpath new v.1.7
+  synchronize:
+    src: /srv/mediawiki/{{file_name|mandatory|relpath('/srv/mediawiki-staging/')}}
+    dest: /srv/mediawiki/{{file_name|mandatory|relpath('/srv/mediawiki-staging/')}}
+    owner: no
+    group: no
